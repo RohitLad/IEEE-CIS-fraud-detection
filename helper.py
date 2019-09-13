@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from scipy import stats
+from sklearn.linear_model import LogisticRegression
+from sklearn import tree
 
 def summary(df):
     summary = pd.DataFrame(df.types, columns=['dtypes'])
@@ -132,3 +134,19 @@ def min_max_scale(df, categories, min_max_dict = None):
         df_new[elem] = df[elem]/(min_max_dict[elem].max - min_max_dict[elem].min)
 
     return df_new,min_max_dict
+
+def make_logistic_model(X,y,X_test,model = None, random_state = 42, max_iter = 500):
+    
+    if model is None:
+        model = LogisticRegression(random_state=random_state, solver='lbfgs', multi_class='multinomial', max_iter=max_iter).fit(X, y)
+    y_test = model.predict(X_test)
+
+    return y_test, model
+
+def make_decisiontree_model(X,y,X_test,model = None):
+    
+    if model is None:
+        model = tree.DecisionTreeClassifier().fit(X,y)
+    y_test = model.predict(X_test)
+
+    return y_test, model
