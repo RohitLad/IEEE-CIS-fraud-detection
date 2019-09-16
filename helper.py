@@ -323,6 +323,7 @@ def Kfold_classifier(X,y,X_test,n_folds, model, random_state=42):
         y_pred_valid = model.predict(X_valid)
         scores_valid.append(model.score(X_valid,y_valid))
         y_pred_test = model.predict_proba(X_test)
+        
         y_preds.append([y_pred_test])
         print('Validation score after ',fold+1,' th fold: ',scores_valid[-1])
     return model, scores_valid, y_preds
