@@ -302,7 +302,7 @@ def train_model_classification(X, X_test, y, params, folds, model_type='lgb', ev
 
             result_dict['feature_importance'] = feature_importance
             result_dict['top_columns'] = cols
-        
+
     return result_dict
 
 
@@ -313,6 +313,7 @@ def Kfold_classifier(X,y,X_test,n_folds, model, random_state=42):
     scores_valid = []
     y_preds = []
     for fold, (train_index, valid_index) in enumerate(cv.split(X)):
+        print('Beginning fold',fold+1)
         X_train = X.iloc[train_index]
         y_train = y.iloc[train_index]
         X_valid = X.iloc[valid_index]
@@ -321,7 +322,7 @@ def Kfold_classifier(X,y,X_test,n_folds, model, random_state=42):
         model.fit(X_train,y_train)
         y_pred_valid = model.predict(X_valid)
         scores_valid.append(model.score(X_valid,y_valid))
-        y_pred_test = model.predict(X_test)
+        y_pred_test = model.predict_proba(X_test)
         y_preds.append([y_pred_test])
-
+        print('Validation score after ',fold+1,' th fold: ',scores_valid[-1])
     return model, scores_valid, y_preds
